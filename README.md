@@ -1,4 +1,4 @@
-[Link](whoolister.github.io/MyKhemical)
+# [Link to GitHub Pages](https://whoolister.github.io/MyKhemical)
 
 ---
 
