@@ -156,10 +156,6 @@ private fun PeriodicTableContent(
     var savedHorizontalOffset by remember { mutableStateOf(0f) }
     var savedVerticalOffset by remember { mutableStateOf(0f) }
 
-    // Zoom scale state - starts at 1.0 (default), can go down to show entire table
-    val scale = remember { Animatable(1f) }
-    val coroutineScope = rememberCoroutineScope()
-
     val density = LocalDensity.current
 
     // Padding to add when fully zoomed out
@@ -174,6 +170,10 @@ private fun PeriodicTableContent(
         (screenHeight.toPx() - zoomedOutPaddingPx * 2) / (baseCardHeight.toPx() * periods + cardSpacing.toPx() * periods)
     }
     val minScale = minOf(minScaleX, minScaleY).coerceAtMost(0.3f)
+
+    // Zoom scale state - starts zoomed out to show entire table
+    val scale = remember { Animatable(minScale) }
+    val coroutineScope = rememberCoroutineScope()
 
     // Calculate dynamic card size based on zoom level
     val cardWidth = baseCardWidth * scale.value
@@ -246,8 +246,6 @@ private fun PeriodicTableContent(
         fun toggleZoom() {
             coroutineScope.launch {
                 isZooming = true
-
-                scale.value
 
                 // If zoomed out, zoom in to default; if zoomed in, zoom out to see all
                 val targetScale = if (scale.value < 0.9f) {
